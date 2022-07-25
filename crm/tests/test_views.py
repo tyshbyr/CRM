@@ -1,11 +1,16 @@
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase
 from crm.serializers import ClientSerializer
 from crm.models import Client, Status
 
+User = get_user_model()
+
 class ClientViewsTests(APITestCase):
     def setUp(self):
+        self.user1 = User.objects.create(username='User1')
+        
         self.status1 = Status.objects.create(title='Waiting')
         self.status2 = Status.objects.create(title='In processing')
         self.status3 = Status.objects.create(title='Processed')
@@ -19,6 +24,7 @@ class ClientViewsTests(APITestCase):
         
     
     def test_create_client(self):
+        self.client.force_login(self.user1)
         url = reverse('client-list')
         data = {'first_name': 'Frodo', 'last_name':'Baggins', 'email':'frodo@baggins.shire', 'phone':'88005553536'}
         response = self.client.post(url, data, format='json')
@@ -45,6 +51,7 @@ class ClientViewsTests(APITestCase):
         self.assertEqual(response.data, serializer_data)
 
     def test_update_client(self):
+        self.client.force_login(self.user1)
         url = reverse('client-detail', kwargs={'pk':self.object1.pk})
         data = {'phone':'89997770707'}
         response = self.client.put(url, data, format='json')
@@ -55,12 +62,14 @@ class ClientViewsTests(APITestCase):
         self.assertEqual(response.data, serializer_data)
         
     def test_destroy_client(self):
+        self.client.force_login(self.user1)
         url = reverse('client-detail', kwargs={'pk':self.object1.pk})
         response = self.client.delete(url)
         
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         
     def test_partial_update_client(self):
+        self.client.force_login(self.user1)
         url = reverse('client-detail', kwargs={'pk':self.object1.pk})
         data = {'first_name': 'Bob'}
         response = self.client.patch(url, data, format='json') 

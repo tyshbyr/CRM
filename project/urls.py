@@ -24,6 +24,8 @@ router = routers.SimpleRouter()
 router.register(r'client', views.ClientViewSet)
 
 urlpatterns = [
+    path('auth/', views.AuthView.as_view()),
     path('', include(router.urls)),
+    path('', include('social_django.urls', namespace='social')),
     path('admin/', admin.site.urls),
 ]

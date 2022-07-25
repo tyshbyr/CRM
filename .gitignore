@@ -10,3 +10,5 @@ data
 **/migrations
 .coverage
 htmlcov
+*.pem
+.env
