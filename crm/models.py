@@ -1,6 +1,9 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
+
+User = get_user_model()
 
 class Client(models.Model):
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
@@ -11,6 +14,7 @@ class Client(models.Model):
     comment = models.TextField(verbose_name='Комментарий', blank=True)
     status = models.ForeignKey('Status', on_delete=models.SET_NULL, null=True, blank=True)
     source = models.ForeignKey('Source', on_delete=models.SET_NULL, null=True, blank=True)
+    manager = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     
     def __str__(self):

@@ -20,7 +20,8 @@ class ClientSerializerTests(TestCase):
             'date_of_creation':serializer_data['date_of_creation'],
             'comment':'Ok',
             'status':{'title':'Waiting'}, 
-            'source':{'title':'AdWords'}
+            'source':{'title':'AdWords'},
+            'manager':None
         }
         
         self.assertEqual(serializer_data, expected_data)
